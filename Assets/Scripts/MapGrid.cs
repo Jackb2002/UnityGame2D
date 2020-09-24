@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using CodeMonkey.Utils;
+using UnityEngine;
 
 public class MapGrid : MonoBehaviour
 {
@@ -34,6 +35,10 @@ public class MapGrid : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        if (Input.GetMouseButtonDown(0))
+        {
+            var pos = UtilsClass.GetMouseWorldPosition();
+            BaseMapGrid.GetGridObject(pos).SetSprite(Resources.Load<Sprite>(@"Map\GrassTile"));
+        }
     }
 }

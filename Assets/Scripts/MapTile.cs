@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
@@ -21,7 +22,14 @@ public class MapTile
         grid = g;
     }
 
-    public void SetSprite(Sprite sprite) => this.sprite = sprite;
+    public void SetSprite(Sprite sprite)
+    {
+        this.sprite = sprite;
+        if(SpriteObject != null)
+        {
+            SpriteObject.GetComponent<SpriteRenderer>().sprite = sprite;
+        }
+    }
 
     public void CreateWorldSprite()
     {
@@ -29,6 +37,11 @@ public class MapTile
         {
             var pos = GetCellWorldPosition();
             SpriteObject = UtilsClass.CreateWorldSprite("MapTile", sprite, pos, Vector3.one, 1, Color.white);
+            SpriteObject.AddComponent<BoxCollider2D>();
+        }
+        else if(SpriteObject != null)
+        {
+            Debug.LogWarning("World Sprite Already Exists For This Tile");
         }
         else
         {
