@@ -1,10 +1,14 @@
-﻿using CodeMonkey.Utils;
+﻿using Assets.Scripts;
+using CodeMonkey.Utils;
+using System;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public class MapGrid : MonoBehaviour
 {
     private const float MAP_TILE_SIZE = 10f;
-    public Grid<MapTile> BaseMapGrid;
+    public static Grid<SpriteTile> SpriteGrid;
+    public static Grid<DataTile> DataGrid;
     public int MapWidth;
     public int MapHeight;
 
@@ -13,18 +17,28 @@ public class MapGrid : MonoBehaviour
     {
         if(MapHeight > 0 && MapWidth > 0)
         {
-            Sprite EmptyTileSprite = Resources.Load<Sprite>(@"Map\EmptyTile");
-            BaseMapGrid = new Grid<MapTile>(MapWidth, MapHeight, MAP_TILE_SIZE, new Vector3(-(MapWidth / 2 * MAP_TILE_SIZE),
-                -(MapHeight / 2 * MAP_TILE_SIZE), 0), (Grid<MapTile> g, int x, int y) => new MapTile(g, x, y), false);
-            for (int x = 0; x < BaseMapGrid.GetWidth(); x++)
+            ItemManager.SelectBlock("Empty");
+            Sprite EmptySprite = Resources.Load<Sprite>(ItemManager.CurrentSpritePath);
+            SpriteGrid = new Grid<SpriteTile>(MapWidth,MapHeight,MAP_TILE_SIZE,new Vector3(-MapWidth/2,-MapHeight/2),false);
+            for (int spriteX = 0; spriteX < SpriteGrid.GetWidth(); spriteX++)
             {
-                for (int y = 0; y < BaseMapGrid.GetHeight(); y++)
+                for (int spriteY = 0; spriteY < SpriteGrid.GetHeight(); spriteY++)
                 {
-                    BaseMapGrid.GetGridObject(x, y).SetSprite(EmptyTileSprite);
-                    BaseMapGrid.GetGridObject(x, y).CreateWorldSprite();
+                    SpriteGrid.SetGridObject(spriteX, spriteY, new SpriteTile(spriteX,spriteY,EmptySprite)); // fill with emptiness
+                    SpriteGrid.GetGridObject(spriteX, spriteY).UpdateGameobject();
+                }
+            } 
+
+            DataGrid = new Grid<DataTile>(MapWidth, MapHeight, MAP_TILE_SIZE, new Vector3(-MapWidth / 2, -MapHeight / 2),false);
+            for (int spriteX = 0; spriteX < SpriteGrid.GetWidth(); spriteX++)
+            {
+                for (int spriteY = 0; spriteY < SpriteGrid.GetHeight(); spriteY++)
+                {
+                    DataGrid.SetGridObject(spriteX, spriteY, new DataTile(ItemManager.CurrentSpriteID,ItemManager.CurrentSpriteName)); // fill with emptiness
                 }
             }
-            Debug.Log("Created Map Tiles");
+
+            ItemManager.SelectBlock("Solid"); // So user cant place empty
         }
         else
         {
@@ -37,8 +51,33 @@ public class MapGrid : MonoBehaviour
     {
         if (Input.GetMouseButtonDown(0))
         {
-            var pos = UtilsClass.GetMouseWorldPosition();
-            BaseMapGrid.GetGridObject(pos).SetSprite(Resources.Load<Sprite>(@"Map\GrassTile"));
+            if (!CheckIfHoveringOverUI())
+            {
+                var pos = UtilsClass.GetMouseWorldPosition();
+                UpdateClickedTile(pos);
+            }
         }
+    }
+
+    private void UpdateClickedTile(Vector3 pos)
+    {
+        int x;
+        int y;
+
+        SpriteGrid.GetIndexFromPosition(pos, out x, out y);
+        //assume data tile and sprite tile are in sync
+        SpriteGrid.SetGridObject(pos, new SpriteTile(x, y, ItemManager.CurrentSprite));
+        DataGrid.SetGridObject(pos, new DataTile(ItemManager.CurrentSpriteID, ItemManager.CurrentSpriteName));
+    }
+
+    private bool CheckIfHoveringOverUI()
+    {
+        EventSystem eventSystem = EventSystem.current;
+        if (EventSystem.current.IsPointerOverGameObject())
+        {
+            Debug.Log("Clicked on the UI");
+            return true;
+        }
+        return false;
     }
 }
