@@ -4,17 +4,19 @@ using System;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class MapGrid : MonoBehaviour
+public partial class MapGrid : MonoBehaviour
 {
     private const float MAP_TILE_SIZE = 10f;
     public static Grid<SpriteTile> SpriteGrid;
     public static Grid<DataTile> DataGrid;
     public int MapWidth;
     public int MapHeight;
+    private GameObject HoverGO;
 
     // Start is called before the first frame update
     void Start()
     {
+        Cursor.visible = false;
         if(MapHeight > 0 && MapWidth > 0)
         {
             ItemManager.SelectBlock("Empty");
@@ -46,36 +48,66 @@ public class MapGrid : MonoBehaviour
         }
     }
 
+    private void OnDestroy()
+    {
+        Cursor.visible = true;
+    }
+
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetMouseButtonDown(0))
+        if (!CheckIfHoveringOverUI())
         {
-            if (!CheckIfHoveringOverUI())
+            var pos = UtilsClass.GetMouseWorldPosition();
+            if (Input.GetMouseButtonDown(0))
             {
-                var pos = UtilsClass.GetMouseWorldPosition();
-                UpdateClickedTile(pos);
+                UpdateCurrentTile(pos,TileUpdateMode.Place);
+            }
+            else if (Input.GetMouseButtonDown(1))
+            {
+                UpdateCurrentTile(pos, TileUpdateMode.Delete);
+            }
+            else
+            {
+                UpdateCurrentTile(pos, TileUpdateMode.Hover);
             }
         }
     }
 
-    private void UpdateClickedTile(Vector3 pos)
+    private void UpdateCurrentTile(Vector3 pos, TileUpdateMode Mode)
     {
         int x;
         int y;
 
         SpriteGrid.GetIndexFromPosition(pos, out x, out y);
-        //assume data tile and sprite tile are in sync
-        SpriteGrid.SetGridObject(pos, new SpriteTile(x, y, ItemManager.CurrentSprite));
-        DataGrid.SetGridObject(pos, new DataTile(ItemManager.CurrentSpriteID, ItemManager.CurrentSpriteName));
+        switch (Mode)
+        {
+            case TileUpdateMode.Hover:
+                Destroy(HoverGO);
+                HoverGO = UtilsClass.CreateWorldSprite("Hover Box", Resources.Load<Sprite>(ItemManager.HoverSprite), SpriteGrid.GetWorldPosition(x,y), Vector3.one, 5, Color.white);
+                break;
+            case TileUpdateMode.Place:
+                Debug.Log("Tile: " + $"{x}:{y} Being set to {ItemManager.CurrentSpriteName}");
+                //assume data tile and sprite tile are in sync
+                SpriteGrid.SetGridObject(x, y, new SpriteTile(x, y, ItemManager.CurrentSprite));
+                DataGrid.SetGridObject(x, y, new DataTile(ItemManager.CurrentSpriteID, ItemManager.CurrentSpriteName));
+                SpriteGrid.GetGridObject(x, y).UpdateGameobject();
+                break;
+            case TileUpdateMode.Delete:
+                Debug.Log("Tile: " + $"{x}:{y} Being set to Empty");
+                //assume data tile and sprite tile are in sync
+                Sprite EmptySprite = Resources.Load<Sprite>(ItemManager.EmptySprite);
+                SpriteGrid.SetGridObject(x, y, new SpriteTile(x, y, EmptySprite));
+                DataGrid.SetGridObject(x, y, new DataTile(-1, "Empty"));
+                SpriteGrid.GetGridObject(x, y).UpdateGameobject();
+                break;
+        }
     }
 
     private bool CheckIfHoveringOverUI()
     {
-        EventSystem eventSystem = EventSystem.current;
         if (EventSystem.current.IsPointerOverGameObject())
         {
-            Debug.Log("Clicked on the UI");
             return true;
         }
         return false;

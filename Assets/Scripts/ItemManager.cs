@@ -13,6 +13,9 @@ namespace Assets.Scripts
         public static int CurrentSpriteID { get; private set; }
         public static string CurrentSpriteName { get; private set; }
         public static Sprite CurrentSprite { get; private set; }
+
+        public const string EmptySprite = @"Map\EmptyTile";
+        public const string HoverSprite = @"Map\HoverTile";
         public static void SetSprite(string SpritePath, int TileID, string Name)
         {
             if (Resources.Load<Sprite>(SpritePath) != null)
@@ -21,6 +24,7 @@ namespace Assets.Scripts
                 CurrentSpritePath = SpritePath;
                 CurrentSpriteName = Name;
                 CurrentSprite = Resources.Load<Sprite>(CurrentSpritePath);
+                Debug.Log("Building material selected " + CurrentSpriteName);
             }
             else
             {
@@ -49,8 +53,15 @@ namespace Assets.Scripts
                     SetSprite(@"Map\TimerTile", 2, Name);
                     break;
                 default:
+                    Debug.LogWarning("Unrecognised Block Selection " + Name);
                     break;
             }
         }
+
+        /// <summary>
+        /// Button press methods need to be non-static so just use this to call it 
+        /// </summary>
+        /// <param name="Name"></param>
+        public void PressMaterialBtn(string Name) => SelectBlock(Name);
     }
 }

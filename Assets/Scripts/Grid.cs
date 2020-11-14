@@ -90,6 +90,7 @@ public class Grid<T>
         }
         else
         {
+            Debug.LogWarning($"Grid couldn't return tile at {x}:{y}");
             return default;
         }
     }

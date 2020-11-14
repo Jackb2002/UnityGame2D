@@ -203,8 +203,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 571681088}
-        m_MethodName: SelectBlock
+      - m_Target: {fileID: 571681089}
+        m_MethodName: PressMaterialBtn
         m_Mode: 5
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -631,7 +631,7 @@ GameObject:
   - component: {fileID: 571681085}
   - component: {fileID: 571681087}
   - component: {fileID: 571681086}
-  - component: {fileID: 571681088}
+  - component: {fileID: 571681089}
   m_Layer: 5
   m_Name: ShopBackground
   m_TagString: Untagged
@@ -692,7 +692,7 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 571681084}
   m_CullTransparentMesh: 0
---- !u!114 &571681088
+--- !u!114 &571681089
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -701,7 +701,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 571681084}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2fa8c237897fb914183f8d6947d30ead, type: 3}
+  m_Script: {fileID: 11500000, guid: 76bedbecc5a395242ad6e7e7b1f39eee, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &577598700
@@ -715,6 +715,7 @@ GameObject:
   - component: {fileID: 577598703}
   - component: {fileID: 577598702}
   - component: {fileID: 577598701}
+  - component: {fileID: 577598704}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -787,6 +788,19 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &577598704
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 577598700}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b323cd6912ba7a949ab7cf21d79da1a8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  MovementSpeed: 5
 --- !u!1 &904052463
 GameObject:
   m_ObjectHideFlags: 0
@@ -1025,8 +1039,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 571681088}
-        m_MethodName: SelectBlock
+      - m_Target: {fileID: 571681089}
+        m_MethodName: PressMaterialBtn
         m_Mode: 5
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1155,8 +1169,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 571681088}
-        m_MethodName: SelectBlock
+      - m_Target: {fileID: 571681089}
+        m_MethodName: PressMaterialBtn
         m_Mode: 5
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
