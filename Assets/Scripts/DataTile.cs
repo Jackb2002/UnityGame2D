@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Assets.Scripts
 {
@@ -10,8 +6,8 @@ namespace Assets.Scripts
     {
         public int ID;
         public string Name;
-        private int x;
-        private int y;
+        private readonly int x;
+        private readonly int y;
 
         public DataTile(int ID, string name)
         {
@@ -34,6 +30,9 @@ namespace Assets.Scripts
         /// <param name="x"></param>
         /// <param name="y"></param>
         /// <returns>Bool - Success?</returns>
-        public bool SetPosition(Grid<DataTile> grid, int x, int y) => grid.SetGridObject(x, y, this);
+        public bool SetPosition(Grid<DataTile> grid, int x, int y)
+        {
+            return grid.SetGridObject(x, y, this);
+        }
     }
 }

@@ -1,6 +1,5 @@
 ﻿using Assets.Scripts;
 using CodeMonkey.Utils;
-using System;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -14,31 +13,34 @@ public partial class MapGrid : MonoBehaviour
     private GameObject HoverGO;
 
     // Start is called before the first frame update
-    void Start()
+    private void Start()
     {
         Cursor.visible = false;
-        if(MapHeight > 0 && MapWidth > 0)
+        if (MapHeight > 0 && MapWidth > 0)
         {
             ItemManager.SelectBlock("Empty");
             Sprite EmptySprite = Resources.Load<Sprite>(ItemManager.CurrentSpritePath);
-            SpriteGrid = new Grid<SpriteTile>(MapWidth,MapHeight,MAP_TILE_SIZE,new Vector3(-MapWidth/2,-MapHeight/2),false);
-            for (int spriteX = 0; spriteX < SpriteGrid.GetWidth(); spriteX++)
+            SpriteGrid = new Grid<SpriteTile>(MapWidth, MapHeight, MAP_TILE_SIZE, new Vector3(-MapWidth / 2, -MapHeight / 2), false);
+            for (int x = 0; x < SpriteGrid.GetWidth(); x++)
             {
-                for (int spriteY = 0; spriteY < SpriteGrid.GetHeight(); spriteY++)
+                for (int y = 0; y < SpriteGrid.GetHeight(); y++)
                 {
-                    SpriteGrid.SetGridObject(spriteX, spriteY, new SpriteTile(spriteX,spriteY,EmptySprite)); // fill with emptiness
-                    SpriteGrid.GetGridObject(spriteX, spriteY).UpdateGameobject();
-                }
-            } 
-
-            DataGrid = new Grid<DataTile>(MapWidth, MapHeight, MAP_TILE_SIZE, new Vector3(-MapWidth / 2, -MapHeight / 2),false);
-            for (int spriteX = 0; spriteX < SpriteGrid.GetWidth(); spriteX++)
-            {
-                for (int spriteY = 0; spriteY < SpriteGrid.GetHeight(); spriteY++)
-                {
-                    DataGrid.SetGridObject(spriteX, spriteY, new DataTile(ItemManager.CurrentSpriteID,ItemManager.CurrentSpriteName)); // fill with emptiness
+                    //fill empty but dont update datagrid as its not been created yet, do manually below
+                    SpriteGrid.SetGridObject(x, y, new SpriteTile(x, y, EmptySprite, false));
                 }
             }
+
+            DataGrid = new Grid<DataTile>(MapWidth, MapHeight, MAP_TILE_SIZE, new Vector3(-MapWidth / 2, -MapHeight / 2), false);
+            for (int x = 0; x < SpriteGrid.GetWidth(); x++)
+            {
+                for (int y = 0; y < SpriteGrid.GetHeight(); y++)
+                {
+                    //Creating data grid
+                    DataGrid.SetGridObject(x, y, new DataTile(ItemManager.CurrentSpriteID, ItemManager.CurrentSpriteName)); // fill with emptiness
+                    SpriteGrid.GetGridObject(x, y).Render();
+                }
+            }
+
 
             ItemManager.SelectBlock("Solid"); // So user cant place empty
         }
@@ -54,52 +56,38 @@ public partial class MapGrid : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
+    private void Update()
     {
         if (!CheckIfHoveringOverUI())
         {
-            var pos = UtilsClass.GetMouseWorldPosition();
-            if (Input.GetMouseButtonDown(0))
+            Cursor.visible = false;
+            Vector3 pos = UtilsClass.GetMouseWorldPosition();
+            if (Input.GetMouseButton(0))
             {
-                UpdateCurrentTile(pos,TileUpdateMode.Place);
+                TileUpdate(pos, TileUpdateMode.Update);
             }
-            else if (Input.GetMouseButtonDown(1))
-            {
-                UpdateCurrentTile(pos, TileUpdateMode.Delete);
-            }
-            else
-            {
-                UpdateCurrentTile(pos, TileUpdateMode.Hover);
-            }
+            TileUpdate(pos, TileUpdateMode.Hover);
+        }
+        else
+        {
+            Cursor.visible = true;
         }
     }
 
-    private void UpdateCurrentTile(Vector3 pos, TileUpdateMode Mode)
+    private void TileUpdate(Vector3 pos, TileUpdateMode Mode)
     {
-        int x;
-        int y;
 
-        SpriteGrid.GetIndexFromPosition(pos, out x, out y);
+        SpriteGrid.GetIndexFromPosition(pos, out int x, out int y);
         switch (Mode)
         {
             case TileUpdateMode.Hover:
                 Destroy(HoverGO);
-                HoverGO = UtilsClass.CreateWorldSprite("Hover Box", Resources.Load<Sprite>(ItemManager.HoverSprite), SpriteGrid.GetWorldPosition(x,y), Vector3.one, 5, Color.white);
+                HoverGO = UtilsClass.CreateWorldSprite("Hover Box", ItemManager.HoverSprite, SpriteGrid.GetWorldPosition(x, y), Vector3.one, 5, Color.white);
                 break;
-            case TileUpdateMode.Place:
-                Debug.Log("Tile: " + $"{x}:{y} Being set to {ItemManager.CurrentSpriteName}");
-                //assume data tile and sprite tile are in sync
+            case TileUpdateMode.Update:
+                Destroy(SpriteGrid.GetGridObject(x, y).SpriteObject);
                 SpriteGrid.SetGridObject(x, y, new SpriteTile(x, y, ItemManager.CurrentSprite));
-                DataGrid.SetGridObject(x, y, new DataTile(ItemManager.CurrentSpriteID, ItemManager.CurrentSpriteName));
-                SpriteGrid.GetGridObject(x, y).UpdateGameobject();
-                break;
-            case TileUpdateMode.Delete:
-                Debug.Log("Tile: " + $"{x}:{y} Being set to Empty");
-                //assume data tile and sprite tile are in sync
-                Sprite EmptySprite = Resources.Load<Sprite>(ItemManager.EmptySprite);
-                SpriteGrid.SetGridObject(x, y, new SpriteTile(x, y, EmptySprite));
-                DataGrid.SetGridObject(x, y, new DataTile(-1, "Empty"));
-                SpriteGrid.GetGridObject(x, y).UpdateGameobject();
+                SpriteGrid.GetGridObject(x, y).Render();
                 break;
         }
     }

@@ -1,31 +1,39 @@
-﻿using CodeMonkey.Utils;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Cryptography;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Assets.Scripts;
+using CodeMonkey.Utils;
 using UnityEngine;
 
 public class SpriteTile
 {
-    private int x;
-    private int y;
-    private Sprite sprite;
+    private readonly int x;
+    private readonly int y;
+    private readonly Sprite sprite;
     public GameObject SpriteObject { get; private set; }
-    public SpriteTile(int x, int y, Sprite sprite)
+    public SpriteTile(int x, int y, Sprite sprite, bool UpdateDatagrid = true)
     {
         this.x = x;
         this.y = y;
         this.sprite = sprite;
+        if (UpdateDatagrid)
+        {
+            MapGrid.DataGrid.SetGridObject(x, y, new DataTile(
+                ItemManager.CurrentSpriteID,
+                ItemManager.CurrentSpriteName));
+        } // update data grid as well
     }
 
-    public void UpdateGameobject()
+    internal void Render()
     {
-        if(SpriteObject != null)
-        {
-            SpriteObject = null;
-        }
-        UtilsClass.CreateWorldSprite(sprite.name, sprite, MapGrid.SpriteGrid.GetWorldPosition(x, y), Vector3.one, 0, Color.white);
+        SpriteObject = UtilsClass.CreateWorldSprite(
+            MapGrid.DataGrid.GetGridObject(x, y).Name,
+            sprite,
+            MapGrid.DataGrid.GetWorldPosition(x, y),
+            Vector3.one,
+            0,
+            Color.white);
+    }
+
+    ~SpriteTile()
+    {
+        UnityEngine.Object.Destroy(SpriteObject);
     }
 }

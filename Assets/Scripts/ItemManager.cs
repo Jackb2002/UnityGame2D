@@ -1,30 +1,36 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace Assets.Scripts
 {
     public class ItemManager : MonoBehaviour
     {
+        public GameObject TextObject;
+        private readonly bool Buildmode = true;
+
         public static string CurrentSpritePath { get; private set; }
         public static int CurrentSpriteID { get; private set; }
         public static string CurrentSpriteName { get; private set; }
         public static Sprite CurrentSprite { get; private set; }
 
-        public const string EmptySprite = @"Map\EmptyTile";
-        public const string HoverSprite = @"Map\HoverTile";
+        public static Sprite EmptySprite { get; private set; }
+        public static Sprite HoverSprite { get; private set; }
+
+        private void Start()
+        {
+            EmptySprite = Resources.Load<Sprite>(@"Map\EmptyTile");
+            HoverSprite = Resources.Load<Sprite>(@"Map\HoverTile");
+        }
+
         public static void SetSprite(string SpritePath, int TileID, string Name)
         {
+            Debug.Log($"Setting sprite data " + $"{SpritePath} {TileID} {Name}");
             if (Resources.Load<Sprite>(SpritePath) != null)
             {
                 CurrentSpriteID = TileID;
                 CurrentSpritePath = SpritePath;
                 CurrentSpriteName = Name;
                 CurrentSprite = Resources.Load<Sprite>(CurrentSpritePath);
-                Debug.Log("Building material selected " + CurrentSpriteName);
+                Debug.Log("Building material selected " + CurrentSpriteName + $" with PPU:{CurrentSprite.pixelsPerUnit}");
             }
             else
             {
@@ -38,6 +44,7 @@ namespace Assets.Scripts
         /// <param name="Name"></param>
         public static void SelectBlock(string Name)
         {
+            Debug.Log(Name);
             switch (Name)
             {
                 case "Empty":
@@ -62,6 +69,9 @@ namespace Assets.Scripts
         /// Button press methods need to be non-static so just use this to call it 
         /// </summary>
         /// <param name="Name"></param>
-        public void PressMaterialBtn(string Name) => SelectBlock(Name);
+        public void PressMaterialBtn(string Name)
+        {
+            SelectBlock(Name);
+        }
     }
 }

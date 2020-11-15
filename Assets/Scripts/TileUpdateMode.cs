@@ -1,9 +1,8 @@
 ﻿public partial class MapGrid
 {
-    enum TileUpdateMode
+    private enum TileUpdateMode
     {
         Hover,
-        Place,
-        Delete
+        Update,
     }
 }
