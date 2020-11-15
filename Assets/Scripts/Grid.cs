@@ -1,15 +1,32 @@
-﻿using CodeMonkey.Utils;
+﻿using Assets.Scripts;
+using CodeMonkey.Utils;
+using System;
 using UnityEngine;
 
+[Serializable]
 public class Grid<T>
 {
+    [SerializeField]
     private readonly int width;
+    [SerializeField]
     private readonly int height;
+    [SerializeField]
     private readonly float cellSize;
+    [NonSerialized]
     private readonly Vector3 originPosition;
+    [SerializeField]
+    private SerializeableVector3 sVec;
+    [SerializeField]
     private readonly T[,] gridArray;
+    [NonSerialized]
     private readonly TextMesh[,] debugTextArray;
     private readonly bool showDebug;
+
+    public Grid(int Width, int Height, float CellSize, SerializeableVector3 OriginPosition, bool ShowDebug) :
+        this(Width, Height, CellSize, OriginPosition.GetVector(), ShowDebug)
+    {
+        Debug.Log("Created Deserialized Grid Object");
+    }
 
     public Grid(int Width, int Height, float CellSize, Vector3 OriginPosition, bool ShowDebug)
     {
@@ -17,6 +34,7 @@ public class Grid<T>
         height = Height;
         cellSize = CellSize;
         originPosition = OriginPosition;
+        sVec = new SerializeableVector3(originPosition);
         gridArray = new T[width, height];
         debugTextArray = new TextMesh[width, height];
         showDebug = ShowDebug;
@@ -105,5 +123,4 @@ public class Grid<T>
         GetIndexFromPosition(worldPos, out int x, out int y);
         return GetGridObject(x, y);
     }
-
 }

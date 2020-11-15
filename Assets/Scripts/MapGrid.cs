@@ -5,49 +5,56 @@ using UnityEngine.EventSystems;
 
 public partial class MapGrid : MonoBehaviour
 {
-    private const float MAP_TILE_SIZE = 10f;
+    public const float MAP_TILE_SIZE = 10f;
     public static Grid<SpriteTile> SpriteGrid;
     public static Grid<DataTile> DataGrid;
     public int MapWidth;
     public int MapHeight;
     private GameObject HoverGO;
 
+    public bool LoadingFromSave = false;
+
     // Start is called before the first frame update
     private void Start()
     {
-        Cursor.visible = false;
-        if (MapHeight > 0 && MapWidth > 0)
+        if (!LoadingFromSave)
         {
-            ItemManager.SelectBlock("Empty");
-            Sprite EmptySprite = Resources.Load<Sprite>(ItemManager.CurrentSpritePath);
-            SpriteGrid = new Grid<SpriteTile>(MapWidth, MapHeight, MAP_TILE_SIZE, new Vector3(-MapWidth / 2, -MapHeight / 2), false);
-            for (int x = 0; x < SpriteGrid.GetWidth(); x++)
+            if (MapHeight > 0 && MapWidth > 0)
             {
-                for (int y = 0; y < SpriteGrid.GetHeight(); y++)
+                ItemManager.SelectBlock("Empty");
+                Sprite EmptySprite = Resources.Load<Sprite>(ItemManager.CurrentSpritePath);
+                Vector3 Origin = new Vector3(-MapWidth * MAP_TILE_SIZE / 2, -MapHeight * MAP_TILE_SIZE / 2);
+                SpriteGrid = new Grid<SpriteTile>(MapWidth, MapHeight, MAP_TILE_SIZE, Origin, false);
+                for (int x = 0; x < SpriteGrid.GetWidth(); x++)
                 {
-                    //fill empty but dont update datagrid as its not been created yet, do manually below
-                    SpriteGrid.SetGridObject(x, y, new SpriteTile(x, y, EmptySprite, false));
+                    for (int y = 0; y < SpriteGrid.GetHeight(); y++)
+                    {
+                        //fill empty but dont update datagrid as its not been created yet, do manually below
+                        SpriteGrid.SetGridObject(x, y, new SpriteTile(x, y, EmptySprite,SpriteGrid.GetWorldPosition(x,y) ,false));
+                    }
                 }
-            }
 
-            DataGrid = new Grid<DataTile>(MapWidth, MapHeight, MAP_TILE_SIZE, new Vector3(-MapWidth / 2, -MapHeight / 2), false);
-            for (int x = 0; x < SpriteGrid.GetWidth(); x++)
-            {
-                for (int y = 0; y < SpriteGrid.GetHeight(); y++)
+                DataGrid = new Grid<DataTile>(MapWidth, MapHeight, MAP_TILE_SIZE, Origin, false);
+                for (int x = 0; x < SpriteGrid.GetWidth(); x++)
                 {
-                    //Creating data grid
-                    DataGrid.SetGridObject(x, y, new DataTile(ItemManager.CurrentSpriteID, ItemManager.CurrentSpriteName)); // fill with emptiness
-                    SpriteGrid.GetGridObject(x, y).Render();
+                    for (int y = 0; y < SpriteGrid.GetHeight(); y++)
+                    {
+                        //Creating data grid
+                        DataGrid.SetGridObject(x, y, new DataTile(ItemManager.CurrentSpriteID, ItemManager.CurrentSpriteName,
+                            SpriteGrid.GetWorldPosition(x, y))); // fill with emptiness
+                        SpriteGrid.GetGridObject(x, y).Render();
+                    }
                 }
+
+
+                ItemManager.SelectBlock("Solid"); // So user cant place empty
             }
-
-
-            ItemManager.SelectBlock("Solid"); // So user cant place empty
         }
         else
         {
-            Debug.LogError("Invalid Map Creation Parameters");
+            throw new System.NotImplementedException();
         }
+        Cursor.visible = false;
     }
 
     private void OnDestroy()
@@ -76,7 +83,6 @@ public partial class MapGrid : MonoBehaviour
 
     private void TileUpdate(Vector3 pos, TileUpdateMode Mode)
     {
-
         SpriteGrid.GetIndexFromPosition(pos, out int x, out int y);
         switch (Mode)
         {
@@ -85,8 +91,15 @@ public partial class MapGrid : MonoBehaviour
                 HoverGO = UtilsClass.CreateWorldSprite("Hover Box", ItemManager.HoverSprite, SpriteGrid.GetWorldPosition(x, y), Vector3.one, 5, Color.white);
                 break;
             case TileUpdateMode.Update:
+                if (GameObject.Find("Spawn") != null && ItemManager.CurrentSpriteName == "Spawn")
+                {
+                    Debug.LogWarning("Tried to place multiple spawn blocks");
+                    UtilsClass.CreateWorldTextPopup(null, "You cant have more than one spawn",
+                        Vector3.one, 50, Color.red, Vector3.zero, 2);
+                    return;
+                }
                 Destroy(SpriteGrid.GetGridObject(x, y).SpriteObject);
-                SpriteGrid.SetGridObject(x, y, new SpriteTile(x, y, ItemManager.CurrentSprite));
+                SpriteGrid.SetGridObject(x, y, new SpriteTile(x, y, ItemManager.CurrentSprite,SpriteGrid.GetWorldPosition(x,y)));
                 SpriteGrid.GetGridObject(x, y).Render();
                 break;
         }

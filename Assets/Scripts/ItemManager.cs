@@ -23,14 +23,12 @@ namespace Assets.Scripts
 
         public static void SetSprite(string SpritePath, int TileID, string Name)
         {
-            Debug.Log($"Setting sprite data " + $"{SpritePath} {TileID} {Name}");
             if (Resources.Load<Sprite>(SpritePath) != null)
             {
                 CurrentSpriteID = TileID;
                 CurrentSpritePath = SpritePath;
                 CurrentSpriteName = Name;
                 CurrentSprite = Resources.Load<Sprite>(CurrentSpritePath);
-                Debug.Log("Building material selected " + CurrentSpriteName + $" with PPU:{CurrentSprite.pixelsPerUnit}");
             }
             else
             {
@@ -58,6 +56,12 @@ namespace Assets.Scripts
                     break;
                 case "Timer":
                     SetSprite(@"Map\TimerTile", 2, Name);
+                    break;
+                case "Goal":
+                    SetSprite(@"Map\GoalTile", 3, Name);
+                    break;
+                case "Spawn":
+                    SetSprite(@"Map\SpawnTile", 4, Name);
                     break;
                 default:
                     Debug.LogWarning("Unrecognised Block Selection " + Name);

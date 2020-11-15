@@ -2,7 +2,7 @@
 
 public class CameraControls : MonoBehaviour
 {
-    public float MovementSpeed = 25f;
+    public float MovementSpeed = 25;
     public void Update()
     {
         float speedMultiplier = Input.GetKey(KeyCode.LeftShift)
