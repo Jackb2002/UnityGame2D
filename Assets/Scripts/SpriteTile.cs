@@ -34,7 +34,8 @@ public class SpriteTile
             MapGrid.DataGrid.SetGridObject(x, y, new DataTile(
                 ItemManager.CurrentSpriteID,
                 ItemManager.CurrentSpriteName,
-                WorldPosition));
+                WorldPosition,
+                ItemManager.CurrentSpritePath));
             Dictionary<string, object> data = new Dictionary<string, object>();
             switch (MapGrid.DataGrid.GetGridObject(x, y).ID)
             {

@@ -29,6 +29,7 @@ namespace Assets.Scripts
                 CurrentSpritePath = SpritePath;
                 CurrentSpriteName = Name;
                 CurrentSprite = Resources.Load<Sprite>(CurrentSpritePath);
+                Debug.Log($"Selected new sprite ID:{CurrentSpriteID} Name:{CurrentSpriteName} Path:{CurrentSpritePath} Valid?:{CurrentSprite != null}");
             }
             else
             {

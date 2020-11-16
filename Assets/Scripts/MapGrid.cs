@@ -41,7 +41,7 @@ public partial class MapGrid : MonoBehaviour
                     {
                         //Creating data grid
                         DataGrid.SetGridObject(x, y, new DataTile(ItemManager.CurrentSpriteID, ItemManager.CurrentSpriteName,
-                            SpriteGrid.GetWorldPosition(x, y))); // fill with emptiness
+                            SpriteGrid.GetWorldPosition(x, y),ItemManager.CurrentSpritePath)); // fill with emptiness
                         SpriteGrid.GetGridObject(x, y).Render();
                     }
                 }
@@ -83,6 +83,11 @@ public partial class MapGrid : MonoBehaviour
 
     private void TileUpdate(Vector3 pos, TileUpdateMode Mode)
     {
+        if(pos == null)
+        {
+            //cant update tile if there is a null position so return, dont know how it was happening but it worked as a fix, created issue on git 
+            return;
+        }
         SpriteGrid.GetIndexFromPosition(pos, out int x, out int y);
         switch (Mode)
         {

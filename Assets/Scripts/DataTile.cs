@@ -9,6 +9,7 @@ namespace Assets.Scripts
     {
         public int ID;
         public string Name;
+        public string SpritePath;
         [SerializeField]
         private readonly int x;
         [SerializeField]
@@ -19,19 +20,20 @@ namespace Assets.Scripts
         private SerializeableVector3 sVec;
 
         public Dictionary<string, object> TileInfo = new Dictionary<string, object>();
-        public DataTile(int ID, string name, Vector3 Position)
+        public DataTile(int ID, string name, Vector3 Position, string Path)
         {
             this.ID = ID;
             Name = name ?? throw new ArgumentNullException(nameof(name));
             WorldPosition = Position;
             sVec = new SerializeableVector3(WorldPosition);
+            SpritePath = Path;
         }
-        public DataTile(int ID, string name, SerializeableVector3 Position) : this(ID, name, Position.GetVector())
+        public DataTile(int ID, string name, SerializeableVector3 Position, string Path) : this(ID, name, Position.GetVector(),Path)
         {
             Debug.Log("Created Deserialized DataTile Object");
         }
 
-        public DataTile(int iD, string name, Vector3 position, int x, int y) : this(iD, name, position)
+        public DataTile(int iD, string name, Vector3 position, int x, int y, string Path) : this(iD, name, position, Path)
         {
             this.x = x;
             this.y = y;

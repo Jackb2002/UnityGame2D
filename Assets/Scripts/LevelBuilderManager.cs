@@ -1,4 +1,5 @@
-﻿using CodeMonkey.Utils;
+﻿using Assets.Scripts;
+using CodeMonkey.Utils;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -57,14 +58,22 @@ public class LevelBuilderManager : MonoBehaviour
                     // All below 0 are non-level blocks like the 'Empty' block
                     if (obj.ID >= 0)
                     {
-                        GameObject tmp = new GameObject(obj.Name);
+                        GameObject tmp = new GameObject(obj.Name+obj.GetHashCode().ToString());
                         foreach (var tileData in obj.TileInfo)
                         {
-                            var sr = tmp.AddComponent<SpriteRenderer>();
-                            Debug.Log("Creating sprite data for object ID: " + data.GetGridObject(x, y).ID);
-                            sr.sprite = MapGrid.SpriteGrid.GetGridObject(x, y).sprite;
-                            sr.color = Color.white;
-                            sr.sortingOrder = 0;
+                            if(tmp.GetComponent<SpriteRenderer>() == null)
+                            {
+                                Debug.LogWarning("No renderer attached creating one");
+                                tmp.AddComponent<SpriteRenderer>();
+                            }
+                            var sr = tmp.GetComponent<SpriteRenderer>();
+                            Debug.Log("Sprite renderer loading in sprite at: " + obj.SpritePath);
+                            sr.sprite = 
+                                Resources.Load<Sprite>(obj.SpritePath);
+                            sr.color 
+                                = Color.white;
+                            sr.sortingOrder 
+                                = 0;
                             switch (tileData.Key)
                             {
                                 case "solid":
@@ -88,6 +97,8 @@ public class LevelBuilderManager : MonoBehaviour
                             }
                         }
                         tmp.transform.parent = MAP.transform; // make it a child of the map
+                        Debug.Log($"Moving {tmp.name} to {obj.WorldPosition}");
+                        tmp.transform.Translate(obj.WorldPosition);    
                     }
                 }
             }
