@@ -4,15 +4,7 @@ using UnityEngine;
 
 public class SpawnBlock : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    public void SpawnPlayer(Player player)
     {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
     }
 }

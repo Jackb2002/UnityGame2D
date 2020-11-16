@@ -51,7 +51,7 @@ public class SpriteTile
                 case 2:
                     //Timer block input data
                     data.Add("solid", true);
-                    data.Add("timer", 1500);
+                    data.Add("timer", 1500f);
                     break;
                 case 3:
                     //Goal block input data
