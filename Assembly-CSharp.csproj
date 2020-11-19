@@ -90,6 +90,7 @@
     <Compile Include="Assets\Scripts\Grid.cs" />
     <Compile Include="Assets\Scripts\ItemManager.cs" />
     <Compile Include="Assets\Scripts\LevelBuilderManager.cs" />
+    <Compile Include="Assets\Scripts\LevelTestManager.cs" />
     <Compile Include="Assets\Scripts\MapGrid.cs" />
     <Compile Include="Assets\Scripts\PlayerMovement.cs" />
     <Compile Include="Assets\Scripts\SerializeableVector3.cs" />

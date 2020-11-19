@@ -58,7 +58,12 @@ public class LevelBuilderManager : MonoBehaviour
                     // All below 0 are non-level blocks like the 'Empty' block
                     if (obj.ID >= 0)
                     {
-                        GameObject tmp = new GameObject(obj.Name+obj.GetHashCode().ToString());
+                        GameObject tmp = new GameObject(obj.Name + obj.GetHashCode().ToString());
+                        if (tmp.name.Contains("Spawn"))
+                        {
+                            tmp.name = "Spawn";
+                        }
+                        tmp.tag = "Map";
                         foreach (var tileData in obj.TileInfo)
                         {
                             if(tmp.GetComponent<SpriteRenderer>() == null)
@@ -104,6 +109,7 @@ public class LevelBuilderManager : MonoBehaviour
             }
 
             SceneManager.LoadSceneAsync(1, LoadSceneMode.Single);
+            MAP.AddComponent<LevelTestManager>();
         }
     }
 
