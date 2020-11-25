@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
 {
@@ -15,46 +13,49 @@ public class PlayerMovement : MonoBehaviour
     private Rigidbody2D rb;
     private bool onGround;
     private const float MAX_SPEED = 10f;
+    private int mapContactPoints = 0;
 
     private void Start()
     {
-        //Animator = GetComponent<Animator>();
+        Animator = GetComponent<Animator>();
         rb = GetComponent<Rigidbody2D>();
         onGround = true;
     }
 
     private void Update()
     {
+
+    }
+
+    private void FixedUpdate()
+    {
+        if (Input.GetKeyDown(Jump) && onGround)
+        {
+            Animator.SetTrigger("Jump");
+            rb.AddForce(new Vector3(0, 1.5f, 0) * JumpForce, ForceMode2D.Impulse);
+        }
+
+
         float multiplier = MovementSpeed;
         if (Input.GetKey(Sprint))
         {
             multiplier *= 1.5f;
         }
-
-
         if (Input.GetKey(Right))
         {
-            //Animator.SetBool("IsWalking", true);
-            rb.AddForce(Vector2.right * multiplier);
+            Animator.SetBool("IsWalking", true);
+            Animator.SetBool("IsRight", true);
+            transform.Translate(Vector2.right * multiplier * Time.fixedDeltaTime);
         }
         else if (Input.GetKey(Left))
         {
-            //Animator.SetBool("IsWalking", true);
-            rb.AddForce(Vector2.left * multiplier);
+            Animator.SetBool("IsWalking", true);
+            Animator.SetBool("IsRight", false);
+            transform.Translate(Vector2.left * multiplier * Time.fixedDeltaTime);
         }
         else
         {
-            //Animator.SetBool("IsWalking", false);
-        }
-
-        if ((rb.velocity.magnitude > MAX_SPEED))
-        {
-            rb.velocity = new Vector2(MAX_SPEED, rb.velocity.y);
-        }
-
-        if (Input.GetKeyDown(Jump) && onGround)
-        {
-            rb.AddForce(new Vector3(0, 1.5f, 0) * JumpForce, ForceMode2D.Impulse);
+            Animator.SetBool("IsWalking", false);
         }
     }
 
@@ -62,6 +63,12 @@ public class PlayerMovement : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("Map"))
         {
+            Debug.Log($"Map points: {mapContactPoints + 1}");
+            if (mapContactPoints == 0)
+            {
+                Animator.SetTrigger("Land");
+            }
+            mapContactPoints++;
             onGround = true;
         }
     }
@@ -70,7 +77,12 @@ public class PlayerMovement : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("Map"))
         {
-            onGround = false;
+            Debug.Log($"Map points: {mapContactPoints - 1}");
+            mapContactPoints--;
+            if (mapContactPoints == 0)
+            {
+                onGround = false;
+            }
         }
     }
 }

@@ -28,7 +28,7 @@ namespace Assets.Scripts
             sVec = new SerializeableVector3(WorldPosition);
             SpritePath = Path;
         }
-        public DataTile(int ID, string name, SerializeableVector3 Position, string Path) : this(ID, name, Position.GetVector(),Path)
+        public DataTile(int ID, string name, SerializeableVector3 Position, string Path) : this(ID, name, Position.GetVector(), Path)
         {
             Debug.Log("Created Deserialized DataTile Object");
         }

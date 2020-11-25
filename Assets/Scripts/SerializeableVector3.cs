@@ -17,6 +17,9 @@ namespace Assets.Scripts
             z = pos.z;
         }
 
-        public UnityEngine.Vector3 GetVector() => new UnityEngine.Vector3(x, y, z);
+        public UnityEngine.Vector3 GetVector()
+        {
+            return new UnityEngine.Vector3(x, y, z);
+        }
     }
 }

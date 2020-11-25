@@ -30,7 +30,7 @@ public partial class MapGrid : MonoBehaviour
                     for (int y = 0; y < SpriteGrid.GetHeight(); y++)
                     {
                         //fill empty but dont update datagrid as its not been created yet, do manually below
-                        SpriteGrid.SetGridObject(x, y, new SpriteTile(x, y, EmptySprite,SpriteGrid.GetWorldPosition(x,y) ,false));
+                        SpriteGrid.SetGridObject(x, y, new SpriteTile(x, y, EmptySprite, SpriteGrid.GetWorldPosition(x, y), false));
                     }
                 }
 
@@ -41,7 +41,7 @@ public partial class MapGrid : MonoBehaviour
                     {
                         //Creating data grid
                         DataGrid.SetGridObject(x, y, new DataTile(ItemManager.CurrentSpriteID, ItemManager.CurrentSpriteName,
-                            SpriteGrid.GetWorldPosition(x, y),ItemManager.CurrentSpritePath)); // fill with emptiness
+                            SpriteGrid.GetWorldPosition(x, y), ItemManager.CurrentSpritePath)); // fill with emptiness
                         SpriteGrid.GetGridObject(x, y).Render();
                     }
                 }
@@ -83,7 +83,7 @@ public partial class MapGrid : MonoBehaviour
 
     private void TileUpdate(Vector3 pos, TileUpdateMode Mode)
     {
-        if(pos == null)
+        if (pos == null)
         {
             //cant update tile if there is a null position so return, dont know how it was happening but it worked as a fix, created issue on git 
             return;
@@ -104,7 +104,7 @@ public partial class MapGrid : MonoBehaviour
                     return;
                 }
                 Destroy(SpriteGrid.GetGridObject(x, y).SpriteObject);
-                SpriteGrid.SetGridObject(x, y, new SpriteTile(x, y, ItemManager.CurrentSprite,SpriteGrid.GetWorldPosition(x,y)));
+                SpriteGrid.SetGridObject(x, y, new SpriteTile(x, y, ItemManager.CurrentSprite, SpriteGrid.GetWorldPosition(x, y)));
                 SpriteGrid.GetGridObject(x, y).Render();
                 break;
         }

@@ -22,7 +22,7 @@ public class SpriteTile
         Debug.Log("Created Deserialized Grid Object");
     } // to allow the use of the serializable vec3
 
-    public SpriteTile(int x, int y, Sprite sprite,Vector3 position, bool UpdateDatagrid = true)
+    public SpriteTile(int x, int y, Sprite sprite, Vector3 position, bool UpdateDatagrid = true)
     {
         this.x = x;
         this.y = y;

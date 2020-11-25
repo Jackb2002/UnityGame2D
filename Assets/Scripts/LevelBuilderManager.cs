@@ -1,9 +1,7 @@
 ﻿using Assets.Scripts;
 using CodeMonkey.Utils;
-using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Runtime.Serialization.Formatters.Binary;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -28,7 +26,7 @@ public class LevelBuilderManager : MonoBehaviour
     {
         if (GameObject.Find("Spawn") == null || GameObject.Find("Goal") == null)
         {
-            var location = new Vector3(-50, 0);
+            Vector3 location = new Vector3(-50, 0);
             UtilsClass.CreateWorldTextPopup(null, "You must have at least one goal " +
                 "and one spawn to play a level!",
     location, 50, Color.red, location, 2);
@@ -54,7 +52,7 @@ public class LevelBuilderManager : MonoBehaviour
             {
                 for (int y = 0; y < data.GetHeight(); y++)
                 {
-                    var obj = data.GetGridObject(x, y);
+                    DataTile obj = data.GetGridObject(x, y);
                     // All below 0 are non-level blocks like the 'Empty' block
                     if (obj.ID >= 0)
                     {
@@ -64,20 +62,20 @@ public class LevelBuilderManager : MonoBehaviour
                             tmp.name = "Spawn";
                         }
                         tmp.tag = "Map";
-                        foreach (var tileData in obj.TileInfo)
+                        foreach (KeyValuePair<string, object> tileData in obj.TileInfo)
                         {
-                            if(tmp.GetComponent<SpriteRenderer>() == null)
+                            if (tmp.GetComponent<SpriteRenderer>() == null)
                             {
                                 Debug.LogWarning("No renderer attached creating one");
                                 tmp.AddComponent<SpriteRenderer>();
                             }
-                            var sr = tmp.GetComponent<SpriteRenderer>();
+                            SpriteRenderer sr = tmp.GetComponent<SpriteRenderer>();
                             Debug.Log("Sprite renderer loading in sprite at: " + obj.SpritePath);
-                            sr.sprite = 
+                            sr.sprite =
                                 Resources.Load<Sprite>(obj.SpritePath);
-                            sr.color 
+                            sr.color
                                 = Color.white;
-                            sr.sortingOrder 
+                            sr.sortingOrder
                                 = 0;
                             switch (tileData.Key)
                             {
@@ -103,7 +101,7 @@ public class LevelBuilderManager : MonoBehaviour
                         }
                         tmp.transform.parent = MAP.transform; // make it a child of the map
                         Debug.Log($"Moving {tmp.name} to {obj.WorldPosition}");
-                        tmp.transform.Translate(obj.WorldPosition);    
+                        tmp.transform.Translate(obj.WorldPosition);
                     }
                 }
             }
@@ -122,10 +120,10 @@ public class LevelBuilderManager : MonoBehaviour
         }
         Directory.CreateDirectory(dir);
         Debug.Log("Serializing Builder Data To " + Directory.GetCurrentDirectory());
-        TmpSaveBuilderData(MapGrid.DataGrid, dir+"tiledat.tmpdat");
+        TmpSaveBuilderData(MapGrid.DataGrid, dir + "tiledat.tmpdat");
     }
 
-    private void TmpSaveBuilderData<T>(Grid<T> grid,string fName)
+    private void TmpSaveBuilderData<T>(Grid<T> grid, string fName)
     {
         BinaryFormatter bf = new BinaryFormatter();
         FileStream fs = File.Create(fName);
