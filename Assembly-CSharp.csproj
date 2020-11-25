@@ -92,6 +92,10 @@
     <Compile Include="Assets\Scripts\LevelBuilderManager.cs" />
     <Compile Include="Assets\Scripts\LevelTestManager.cs" />
     <Compile Include="Assets\Scripts\MapGrid.cs" />
+    <Compile Include="Assets\Scripts\Multiplayer\Client\NetworkStateObject.cs" />
+    <Compile Include="Assets\Scripts\Multiplayer\Client\PlayerClientConnection.cs" />
+    <Compile Include="Assets\Scripts\Multiplayer\Client\RecievedEventArgs.cs" />
+    <Compile Include="Assets\Scripts\Multiplayer\Port.cs" />
     <Compile Include="Assets\Scripts\PlayerMovement.cs" />
     <Compile Include="Assets\Scripts\SerializeableVector3.cs" />
     <Compile Include="Assets\Scripts\SpawnBlock.cs" />
