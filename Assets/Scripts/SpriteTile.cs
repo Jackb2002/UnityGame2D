@@ -77,6 +77,7 @@ public class SpriteTile
             Vector3.one,
             0,
             Color.white);
+        SpriteObject.transform.parent = GameObject.Find("LevelBuilder")?.transform;
     }
 
     ~SpriteTile()

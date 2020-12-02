@@ -2,15 +2,12 @@
 
 public class GoalBlock : MonoBehaviour
 {
-    // Start is called before the first frame update
-    private void Start()
+    private void OnCollisionEnter2D(Collision2D collision)
     {
-
-    }
-
-    // Update is called once per frame
-    private void Update()
-    {
-
+        Debug.Log(collision.gameObject.tag + " tag hit goal");
+        if (collision.gameObject.CompareTag("Player"))
+        {
+            LevelTestManager.EndTest();
+        }
     }
 }

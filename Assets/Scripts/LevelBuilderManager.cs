@@ -39,15 +39,15 @@ public class LevelBuilderManager : MonoBehaviour
         else
         {
             SaveBuilderdataTmp();
-            Grid<Assets.Scripts.DataTile> data = MapGrid.DataGrid;
+            Grid<DataTile> data = MapGrid.DataGrid;
 
             Vector3 MapMidpoint = new Vector3(
                 -data.GetWidth() * MapGrid.MAP_TILE_SIZE / 2,
                 -data.GetHeight() * MapGrid.MAP_TILE_SIZE / 2);
 
             GameObject MAP = new GameObject("Map");
-            DontDestroyOnLoad(MAP);
-
+            GameObject LevelRoot = new GameObject("LEVEL");
+            MAP.transform.parent = LevelRoot.transform;
             for (int x = 0; x < data.GetWidth(); x++)
             {
                 for (int y = 0; y < data.GetHeight(); y++)
@@ -106,29 +106,10 @@ public class LevelBuilderManager : MonoBehaviour
                 }
             }
 
-            SceneManager.LoadSceneAsync(1, LoadSceneMode.Single);
+            SceneManager.LoadSceneAsync(1, LoadSceneMode.Additive);
+            LevelTestManager.LevelBuilder = GameObject.Find("LevelBuilder");
+            LevelTestManager.LevelBuilder.SetActive(false);
             MAP.AddComponent<LevelTestManager>();
         }
-    }
-
-    private void SaveBuilderdataTmp()
-    {
-        const string dir = @"Tmp\";
-        if (Directory.Exists(dir))
-        {
-            Directory.Delete(dir, true);
-        }
-        Directory.CreateDirectory(dir);
-        Debug.Log("Serializing Builder Data To " + Directory.GetCurrentDirectory());
-        TmpSaveBuilderData(MapGrid.DataGrid, dir + "tiledat.tmpdat");
-    }
-
-    private void TmpSaveBuilderData<T>(Grid<T> grid, string fName)
-    {
-        BinaryFormatter bf = new BinaryFormatter();
-        FileStream fs = File.Create(fName);
-        bf.Serialize(fs, grid);
-        fs.Close();
-        fs.Dispose();
     }
 }

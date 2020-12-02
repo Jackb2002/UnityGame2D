@@ -94,6 +94,7 @@ public partial class MapGrid : MonoBehaviour
             case TileUpdateMode.Hover:
                 Destroy(HoverGO);
                 HoverGO = UtilsClass.CreateWorldSprite("Hover Box", ItemManager.HoverSprite, SpriteGrid.GetWorldPosition(x, y), Vector3.one, 5, Color.white);
+                HoverGO.transform.parent = GameObject.Find("LevelBuilder")?.transform;
                 break;
             case TileUpdateMode.Update:
                 if (GameObject.Find("Spawn") != null && ItemManager.CurrentSpriteName == "Spawn")

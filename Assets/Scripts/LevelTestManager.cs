@@ -1,19 +1,34 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class LevelTestManager : MonoBehaviour
 {
-    private GameObject Spawn;
-    private readonly List<GameObject> Players = new List<GameObject>();
-
+    private SpawnBlock Spawn;
+    public static GameObject LevelBuilder;
 
     private void Awake()
     {
-        GameObject Player = Instantiate<GameObject>(Resources.Load<GameObject>(@"Player\TestPlayer"), null);
-        Transform transform = Player.transform;
-        Spawn = GameObject.Find("Spawn");
-        Vector3 spawnPos = Spawn.transform.position;
-        transform.position = new Vector3(spawnPos.x, spawnPos.y + 20, spawnPos.z);
-        Player.transform.position = transform.position; // move the player to the spawn object   
+        if(LevelBuilder == null)
+        {
+            Debug.LogError("No level builder to return to");
+        }
+        GameObject Player = Instantiate(Resources.Load<GameObject>(@"Player\TestPlayer"), null);
+        Player.transform.parent = GameObject.Find("LEVEL").transform;
+        var s = GameObject.Find("Spawn");
+        Spawn = s.GetComponent<SpawnBlock>();
+        Spawn.SpawnPlayer(Player);
+    }
+
+    public static void EndTest()
+    {
+        if(LevelBuilder == null)
+        {
+            return;
+        }
+        LevelBuilder.SetActive(true);
+        LevelBuilder = null;
+        Destroy(GameObject.Find("LEVEL"));
+        SceneManager.UnloadSceneAsync(1,UnloadSceneOptions.UnloadAllEmbeddedSceneObjects);
     }
 }

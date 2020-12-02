@@ -29,13 +29,6 @@ public class PlayerMovement : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if (Input.GetKeyDown(Jump) && onGround)
-        {
-            Animator.SetTrigger("Jump");
-            rb.AddForce(new Vector3(0, 1.5f, 0) * JumpForce, ForceMode2D.Impulse);
-        }
-
-
         float multiplier = MovementSpeed;
         if (Input.GetKey(Sprint))
         {
@@ -43,19 +36,16 @@ public class PlayerMovement : MonoBehaviour
         }
         if (Input.GetKey(Right))
         {
-            Animator.SetBool("IsWalking", true);
-            Animator.SetBool("IsRight", true);
             transform.Translate(Vector2.right * multiplier * Time.fixedDeltaTime);
         }
         else if (Input.GetKey(Left))
         {
-            Animator.SetBool("IsWalking", true);
-            Animator.SetBool("IsRight", false);
             transform.Translate(Vector2.left * multiplier * Time.fixedDeltaTime);
         }
-        else
+
+        if (Input.GetKeyDown(Jump) && onGround)
         {
-            Animator.SetBool("IsWalking", false);
+            rb.AddForce(new Vector3(0, 1.5f, 0) * JumpForce, ForceMode2D.Impulse);
         }
     }
 
@@ -63,11 +53,6 @@ public class PlayerMovement : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("Map"))
         {
-            Debug.Log($"Map points: {mapContactPoints + 1}");
-            if (mapContactPoints == 0)
-            {
-                Animator.SetTrigger("Land");
-            }
             mapContactPoints++;
             onGround = true;
         }
@@ -77,7 +62,6 @@ public class PlayerMovement : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("Map"))
         {
-            Debug.Log($"Map points: {mapContactPoints - 1}");
             mapContactPoints--;
             if (mapContactPoints == 0)
             {

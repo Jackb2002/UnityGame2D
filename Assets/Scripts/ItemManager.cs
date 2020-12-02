@@ -5,7 +5,6 @@ namespace Assets.Scripts
     public class ItemManager : MonoBehaviour
     {
         public GameObject TextObject;
-        private readonly bool Buildmode = true;
 
         public static string CurrentSpritePath { get; private set; }
         public static int CurrentSpriteID { get; private set; }
