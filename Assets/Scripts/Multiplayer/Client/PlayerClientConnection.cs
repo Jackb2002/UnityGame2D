@@ -4,7 +4,6 @@ using System.Net;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 using UnityEditor;
 using UnityEngine;
 
@@ -51,7 +50,7 @@ public class PlayerClientConnection
     public void SendClientData(string text)
     {
         byte[] byteData = System.Text.Encoding.UTF8.GetBytes(text);
-        client.Client.BeginSend(byteData, 0, byteData.Length,SocketFlags.None,new AsyncCallback(SendCallback),client);
+        client.Client.BeginSend(byteData, 0, byteData.Length, SocketFlags.None, new AsyncCallback(SendCallback), client);
         sendDone.WaitOne();
     }
 
@@ -82,7 +81,7 @@ public class PlayerClientConnection
         TcpClient client = state.client;
 
         int bytesRead = client.Client.EndReceive(ar);
-        if(bytesRead > 0)
+        if (bytesRead > 0)
         {
             state.sb.Append(Encoding.UTF8.GetString(state.Buffer));
             client.Client.BeginReceive(state.Buffer, 0, BUFFER_SIZE, SocketFlags.None, new AsyncCallback(RecieveCallback), state);
@@ -91,13 +90,13 @@ public class PlayerClientConnection
         {
             string response = string.Empty;
             byte[] byteData;
-            if(state.sb.Length > 0)
+            if (state.sb.Length > 0)
             {
                 response = state.sb.ToString();
                 byteData = System.Text.Encoding.UTF8.GetBytes(response);
                 DataRecieved?.Invoke(this, new RecievedEventArgs(byteData, response, state.client));
             }
-            recieveDone.Set(); 
+            recieveDone.Set();
         }
     }
 }

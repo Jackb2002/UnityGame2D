@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using UnityEngine;
 
 namespace Assets.Scripts.Level
@@ -12,22 +9,29 @@ namespace Assets.Scripts.Level
     {
         private static StringBuilder FileContents = new StringBuilder();
 
-        public static string SaveLevel(string Path, LevelData levelData)
+        public static string SaveLevel(string Path, LevelData ld)
         {
             if (File.Exists(Path))
             {
                 Debug.Log("File Already Exists, moving to .old file");
                 File.Move(Path, Path + ".old");
-                File.Delete(Path); 
+                File.Delete(Path);
             }
 
             FileStream fs = File.Create(Path);
-            AddToFile(levelData.Author + ";");
+            AddToFile(ld.Author + ";" + Environment.NewLine);
+            AddToFile(ld.maxPlayers + ";" + Environment.NewLine);
+            for (int x = 0; x < ld.Data.GetWidth(); x++)
+            {
+                for (int y = 0; y < ld.Data.GetHeight(); y++)
+                {
+                    var obj = ld.Data.GetGridObject(x, y);
+                    var s = string.Join(",", obj.ID, obj.Name, obj.WorldPosition, obj.SpritePath);
+                    AddToFile(s + Environment.NewLine);
+                }
+            }
         }
 
-        private static void AddToFile(string v)
-        {
-            FileContents.Append(v);
-        }
+        private static void AddToFile(string v) => FileContents.Append(v);
     }
 }

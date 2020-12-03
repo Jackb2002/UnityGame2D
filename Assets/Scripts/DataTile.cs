@@ -10,13 +10,9 @@ namespace Assets.Scripts
         public int ID;
         public string Name;
         public string SpritePath;
-        [SerializeField]
         private readonly int x;
-        [SerializeField]
         private readonly int y;
-        [NonSerialized]
         public Vector3 WorldPosition;
-        [SerializeField]
         private SerializeableVector3 sVec;
 
         public Dictionary<string, object> TileInfo = new Dictionary<string, object>();

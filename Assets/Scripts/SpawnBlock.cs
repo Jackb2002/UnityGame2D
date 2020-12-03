@@ -1,5 +1,4 @@
-﻿using System;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class SpawnBlock : MonoBehaviour
 {
@@ -9,7 +8,7 @@ public class SpawnBlock : MonoBehaviour
     {
         return new Vector3(
             transform.position.x,
-            transform.position.y + GetComponent<BoxCollider2D>().bounds.extents.y*1.1f,
+            transform.position.y + GetComponent<BoxCollider2D>().bounds.extents.y * 1.1f,
             transform.position.z);
     }
 

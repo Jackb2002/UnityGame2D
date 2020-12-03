@@ -1,8 +1,6 @@
 ﻿using Assets.Scripts;
 using CodeMonkey.Utils;
 using System.Collections.Generic;
-using System.IO;
-using System.Runtime.Serialization.Formatters.Binary;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -38,7 +36,6 @@ public class LevelBuilderManager : MonoBehaviour
         }
         else
         {
-            SaveBuilderdataTmp();
             Grid<DataTile> data = MapGrid.DataGrid;
 
             Vector3 MapMidpoint = new Vector3(

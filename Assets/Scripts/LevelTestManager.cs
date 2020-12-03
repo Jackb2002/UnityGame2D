@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class LevelTestManager : MonoBehaviour
@@ -9,7 +8,7 @@ public class LevelTestManager : MonoBehaviour
 
     private void Awake()
     {
-        if(LevelBuilder == null)
+        if (LevelBuilder == null)
         {
             Debug.LogError("No level builder to return to");
         }
@@ -22,13 +21,13 @@ public class LevelTestManager : MonoBehaviour
 
     public static void EndTest()
     {
-        if(LevelBuilder == null)
+        if (LevelBuilder == null)
         {
             return;
         }
         LevelBuilder.SetActive(true);
         LevelBuilder = null;
         Destroy(GameObject.Find("LEVEL"));
-        SceneManager.UnloadSceneAsync(1,UnloadSceneOptions.UnloadAllEmbeddedSceneObjects);
+        SceneManager.UnloadSceneAsync(1, UnloadSceneOptions.UnloadAllEmbeddedSceneObjects);
     }
 }
