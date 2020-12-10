@@ -61,8 +61,22 @@ public partial class Map : MonoBehaviour
             if (ofd.ShowDialog() == DialogResult.OK)
             {
                 var ld = LevelIO.LoadLevel(ofd.FileName);
+                for (int x = 0; x < SpriteGrid.GetWidth(); x++)
+                {
+                    for (int y = 0; y < SpriteGrid.GetHeight(); y++)
+                    {
+                        Destroy(SpriteGrid.GetGridObject(x, y).SpriteObject);
+                    }
+                }
                 SpriteGrid = ld.Sprites;
                 DataGrid = ld.Data;
+                for (int x = 0; x < SpriteGrid.GetWidth(); x++)
+                {
+                    for (int y = 0; y < SpriteGrid.GetHeight(); y++)
+                    {
+                        SpriteGrid.GetGridObject(x, y).Render();
+                    }
+                }
             }
             else
             {

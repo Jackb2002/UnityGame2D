@@ -61,11 +61,6 @@ public class LevelBuilderManager : MonoBehaviour
         else
         {
             Grid<DataTile> data = Map.DataGrid;
-
-            Vector3 MapMidpoint = new Vector3(
-                -data.GetWidth() * Map.MAP_TILE_SIZE / 2,
-                -data.GetHeight() * Map.MAP_TILE_SIZE / 2);
-
             GameObject MAP = new GameObject("Map");
             GameObject LevelRoot = new GameObject("LEVEL");
             MAP.transform.parent = LevelRoot.transform;

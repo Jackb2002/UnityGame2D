@@ -97,7 +97,6 @@ public class SpriteTile
                 var data = d.Single(item => item.x == x && item.y == y);
                 var spriteTile = new SpriteTile(x, y, Resources.Load<Sprite>(data.SpritePath), data.WorldPosition, false);
                 g.SetGridObject(x, y, spriteTile);
-                g.GetGridObject(x, y).Render();
             }
         }
         return g;

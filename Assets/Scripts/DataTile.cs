@@ -17,6 +17,7 @@ namespace Assets.Scripts
         private SerializeableVector3 sVec;
 
         public Dictionary<string, object> TileInfo = new Dictionary<string, object>();
+
         public DataTile(int ID, string name, Vector3 Position, string Path)
         {
             this.ID = ID;
