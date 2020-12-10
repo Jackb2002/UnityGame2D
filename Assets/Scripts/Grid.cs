@@ -44,6 +44,7 @@ public class Grid<T>
             for (int y = 0; y < gridArray.GetLength(1); y++)
             {
                 gridArray[x, y] = default(T);
+
                 if (showDebug)
                 {
                     debugTextArray[x, y] = UtilsClass.CreateWorldText(gridArray[x, y]?.ToString(),

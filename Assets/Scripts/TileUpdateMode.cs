@@ -1,4 +1,4 @@
-﻿public partial class MapGrid
+﻿public partial class Map
 {
     private enum TileUpdateMode
     {

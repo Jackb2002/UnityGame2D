@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace Assets.Scripts
@@ -10,8 +11,8 @@ namespace Assets.Scripts
         public int ID;
         public string Name;
         public string SpritePath;
-        private readonly int x;
-        private readonly int y;
+        public readonly int x;
+        public readonly int y;
         public Vector3 WorldPosition;
         private SerializeableVector3 sVec;
 
@@ -33,6 +34,28 @@ namespace Assets.Scripts
         {
             this.x = x;
             this.y = y;
+        }
+
+        public override string ToString()
+        {
+            return $"{x}:{y} - {Name}";
+        }
+
+        public static Grid<DataTile> InitializeGrid(Grid<DataTile> g, List<DataTile> d)
+        {
+            for (int x = 0; x < g.GetWidth(); x++)
+            {
+                for (int y = 0; y < g.GetHeight(); y++)
+                {
+                    var tile = d.Where(item => item.x == x && item.y == y);
+                    var element = tile.ElementAt(0);
+                    if (element != null)
+                    {
+                        g.SetGridObject(x, y, element);
+                    }
+                }
+            }
+            return g;
         }
     }
 }

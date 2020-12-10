@@ -1,6 +1,9 @@
 ﻿using Assets.Scripts;
+using Assets.Scripts.Level;
 using CodeMonkey.Utils;
 using System.Collections.Generic;
+using System.IO;
+using System.Windows.Forms;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -8,16 +11,37 @@ public class LevelBuilderManager : MonoBehaviour
 {
     public GameObject BuilderCanvas;
     public GameObject PauseCanvas;
+    public static bool Paused;
 
     private void Start()
     {
         BuilderCanvas.SetActive(true);
         PauseCanvas.SetActive(false);
+        Paused = false;
     }
     public void SwitchMenus()
     {
         BuilderCanvas.SetActive(!BuilderCanvas.activeSelf); // swap the menus over
         PauseCanvas.SetActive(!BuilderCanvas.activeSelf);
+        Paused = PauseCanvas.activeInHierarchy;
+    }
+
+    public void SaveLevel()
+    {
+        SaveFileDialog sfd = new SaveFileDialog();
+        sfd.DefaultExt = ".level";
+        sfd.Filter = "Level Files | *.level";
+        if(sfd.ShowDialog() == DialogResult.OK)
+        {
+            LevelData ld = new LevelData(Path.GetFileNameWithoutExtension(sfd.FileName), Map.DataGrid, Map.SpriteGrid, "Author", 8); // defualt settings will implement changing it later
+            LevelIO.SaveLevel(ld,Path.GetFullPath(sfd.FileName));
+        }
+    }
+
+    public void LoadLevel()
+    {
+        Map.LoadingFromSave = true;
+        GameObject.Find("Grid").GetComponent<Map>().SendMessage("Awake");
     }
 
     public void PlayLevel(bool Online = false)
@@ -36,11 +60,11 @@ public class LevelBuilderManager : MonoBehaviour
         }
         else
         {
-            Grid<DataTile> data = MapGrid.DataGrid;
+            Grid<DataTile> data = Map.DataGrid;
 
             Vector3 MapMidpoint = new Vector3(
-                -data.GetWidth() * MapGrid.MAP_TILE_SIZE / 2,
-                -data.GetHeight() * MapGrid.MAP_TILE_SIZE / 2);
+                -data.GetWidth() * Map.MAP_TILE_SIZE / 2,
+                -data.GetHeight() * Map.MAP_TILE_SIZE / 2);
 
             GameObject MAP = new GameObject("Map");
             GameObject LevelRoot = new GameObject("LEVEL");

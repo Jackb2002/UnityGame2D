@@ -90,10 +90,10 @@
     <Compile Include="Assets\Scripts\Grid.cs" />
     <Compile Include="Assets\Scripts\ItemManager.cs" />
     <Compile Include="Assets\Scripts\Level\LevelData.cs" />
-    <Compile Include="Assets\Scripts\Level\Serialization.cs" />
+    <Compile Include="Assets\Scripts\Level\LevelIO.cs" />
     <Compile Include="Assets\Scripts\LevelBuilderManager.cs" />
     <Compile Include="Assets\Scripts\LevelTestManager.cs" />
-    <Compile Include="Assets\Scripts\MapGrid.cs" />
+    <Compile Include="Assets\Scripts\Map.cs" />
     <Compile Include="Assets\Scripts\Multiplayer\Client\NetworkStateObject.cs" />
     <Compile Include="Assets\Scripts\Multiplayer\Client\PlayerClientConnection.cs" />
     <Compile Include="Assets\Scripts\Multiplayer\Client\RecievedEventArgs.cs" />
@@ -305,6 +305,9 @@
     </Reference>
     <Reference Include="UnityEditor">
       <HintPath>C:/Program Files/Unity/Hub/Editor/2019.4.15f1/Editor/Data/Managed/UnityEditor.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Windows.Forms">
+      <HintPath>C:/Users/jackb/GitHub/UnityGame2D/Assets/Imported Libraries/System.Windows.Forms.dll</HintPath>
     </Reference>
     <Reference Include="Unity.Analytics.Editor">
       <HintPath>C:/Users/jackb/GitHub/UnityGame2D/Library/PackageCache/com.unity.analytics@3.3.5/Unity.Analytics.Editor.dll</HintPath>

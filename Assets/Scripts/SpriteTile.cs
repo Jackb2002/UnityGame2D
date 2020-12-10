@@ -2,13 +2,14 @@
 using CodeMonkey.Utils;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 [Serializable]
 public class SpriteTile
 {
-    private readonly int x;
-    private readonly int y;
+    public readonly int x;
+    public readonly int y;
     [NonSerialized]
     public readonly Sprite sprite;
     [NonSerialized]
@@ -31,13 +32,15 @@ public class SpriteTile
         sVec = new SerializeableVector3(WorldPosition);
         if (UpdateDatagrid)
         {
-            MapGrid.DataGrid.SetGridObject(x, y, new DataTile(
+            Map.DataGrid.SetGridObject(x, y, new DataTile(
                 ItemManager.CurrentSpriteID,
                 ItemManager.CurrentSpriteName,
                 WorldPosition,
+                x,
+                y,
                 ItemManager.CurrentSpritePath));
             Dictionary<string, object> data = new Dictionary<string, object>();
-            switch (MapGrid.DataGrid.GetGridObject(x, y).ID)
+            switch (Map.DataGrid.GetGridObject(x, y).ID)
             {
                 case 0:
                     //Solid block input data
@@ -64,16 +67,16 @@ public class SpriteTile
                     data.Add("spawn", true);
                     break;
             }
-            MapGrid.DataGrid.GetGridObject(x, y).TileInfo = data;
+            Map.DataGrid.GetGridObject(x, y).TileInfo = data;
         } // update data grid as well
     }
 
     internal void Render()
     {
         SpriteObject = UtilsClass.CreateWorldSprite(
-            MapGrid.DataGrid.GetGridObject(x, y).Name,
+            Map.DataGrid.GetGridObject(x, y).Name,
             sprite,
-            MapGrid.DataGrid.GetWorldPosition(x, y),
+            Map.DataGrid.GetWorldPosition(x, y),
             Vector3.one,
             0,
             Color.white);
@@ -83,5 +86,20 @@ public class SpriteTile
     ~SpriteTile()
     {
         UnityEngine.Object.Destroy(SpriteObject);
+    }
+
+    internal static Grid<SpriteTile> InitializeGrid(Grid<SpriteTile> g, List<DataTile> d)
+    {
+        for (int x = 0; x < g.GetWidth(); x++)
+        {
+            for (int y = 0; y < g.GetHeight(); y++)
+            {
+                var data = d.Single(item => item.x == x && item.y == y);
+                var spriteTile = new SpriteTile(x, y, Resources.Load<Sprite>(data.SpritePath), data.WorldPosition, false);
+                g.SetGridObject(x, y, spriteTile);
+                g.GetGridObject(x, y).Render();
+            }
+        }
+        return g;
     }
 }
