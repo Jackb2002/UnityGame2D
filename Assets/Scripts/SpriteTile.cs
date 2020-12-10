@@ -39,35 +39,8 @@ public class SpriteTile
                 x,
                 y,
                 ItemManager.CurrentSpritePath));
-            Dictionary<string, object> data = new Dictionary<string, object>();
-            switch (Map.DataGrid.GetGridObject(x, y).ID)
-            {
-                case 0:
-                    //Solid block input data
-                    data.Add("solid", true);
-                    break;
-                case 1:
-                    //Damage block input data
-                    data.Add("solid", true);
-                    data.Add("damage", 10f);
-                    break;
-                case 2:
-                    //Timer block input data
-                    data.Add("solid", true);
-                    data.Add("timer", 1500f);
-                    break;
-                case 3:
-                    //Goal block input data
-                    data.Add("solid", true);
-                    data.Add("goal", true);
-                    break;
-                case 4:
-                    //Spawn block input data
-                    data.Add("solid", true);
-                    data.Add("spawn", true);
-                    break;
-            }
-            Map.DataGrid.GetGridObject(x, y).TileInfo = data;
+            
+            DataTile.AssignTileInfo(Map.DataGrid.GetGridObject(x,y));
         } // update data grid as well
     }
 

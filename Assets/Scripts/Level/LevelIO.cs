@@ -48,14 +48,9 @@ namespace Assets.Scripts.Level
                 Debug.LogError("Could not find file at path");
                 return default;
             }
-            string Name = default;
-            int maxPlayers = default;
-            string Author = default;
-
-
-            Author = Lines[0].Trim();
-            Name = Lines[1].Trim();
-            maxPlayers = int.Parse(Lines[2].Trim());
+            string Author = Lines[0].Trim();
+            string Name = Lines[1].Trim();
+            int maxPlayers = int.Parse(Lines[2].Trim());
             List<DataTile> DataItems = new List<DataTile>();
             for (int lineIndex = 4; lineIndex < Lines.Length; lineIndex++)
             {
@@ -106,8 +101,12 @@ namespace Assets.Scripts.Level
             var worldPos = new Vector3(float.Parse(vals[0]),
                             float.Parse(vals[1]),
                             float.Parse(vals[2]));
-
-            return new DataTile(int.Parse(data[0]), data[1], worldPos, int.Parse(data[4]), int.Parse(data[5]), data[3]);
+            var tile = new DataTile(int.Parse(data[0]), data[1], worldPos, int.Parse(data[4]), int.Parse(data[5]), data[3]);
+            if (tile.Name != "Empty")
+            {
+                DataTile.AssignTileInfo(tile);
+            }
+            return tile;
         }
 
         private static void AddToFile(string v) => SaveFileContents.Append(v);

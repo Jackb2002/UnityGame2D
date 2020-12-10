@@ -58,5 +58,38 @@ namespace Assets.Scripts
             }
             return g;
         }
+
+        internal static void AssignTileInfo(DataTile tile)
+        {
+            Dictionary<string, object> data = new Dictionary<string, object>();
+            switch (tile.ID)
+            {
+                case 0:
+                    //Solid block input data
+                    data.Add("solid", true);
+                    break;
+                case 1:
+                    //Damage block input data
+                    data.Add("solid", true);
+                    data.Add("damage", 10f);
+                    break;
+                case 2:
+                    //Timer block input data
+                    data.Add("solid", true);
+                    data.Add("timer", 1500f);
+                    break;
+                case 3:
+                    //Goal block input data
+                    data.Add("solid", true);
+                    data.Add("goal", true);
+                    break;
+                case 4:
+                    //Spawn block input data
+                    data.Add("solid", true);
+                    data.Add("spawn", true);
+                    break;
+            }
+            tile.TileInfo = data;
+        }
     }
 }
