@@ -3,7 +3,6 @@ using UnityEngine.SceneManagement;
 
 public class LevelTestManager : MonoBehaviour
 {
-    private SpawnBlock Spawn;
     public static GameObject LevelBuilder;
 
     private void Awake()
@@ -14,9 +13,13 @@ public class LevelTestManager : MonoBehaviour
         }
         GameObject Player = Instantiate(Resources.Load<GameObject>(@"Player\TestPlayer"), null);
         Player.transform.parent = GameObject.Find("LEVEL").transform;
+        SpawnPlayer(Player);
+    }
+
+    internal static void SpawnPlayer(GameObject Player)
+    {
         var s = GameObject.Find("Spawn");
-        Spawn = s.GetComponent<SpawnBlock>();
-        Spawn.SpawnPlayer(Player);
+        s.GetComponent<SpawnBlock>().SpawnPlayer(Player);
     }
 
     public static void EndTest()

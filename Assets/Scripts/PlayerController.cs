@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-public class PlayerMovement : MonoBehaviour
+public class PlayerController : MonoBehaviour
 {
     public KeyCode Right;
     public KeyCode Left;
@@ -8,24 +8,23 @@ public class PlayerMovement : MonoBehaviour
     public KeyCode Sprint;
     public float JumpForce;
     public float MovementSpeed;
+    public float SpawnHealth;
 
     private Animator Animator;
     private Rigidbody2D rb;
     private bool onGround;
     private const float MAX_SPEED = 10f;
     private int mapContactPoints = 0;
+    private float healthPoints;
+
 
     private void Start()
     {
         Animator = GetComponent<Animator>();
         rb = GetComponent<Rigidbody2D>();
         onGround = true;
-    }
-
-    private void Update()
-    {
-
-    }
+        healthPoints = SpawnHealth;
+    }  
 
     private void FixedUpdate()
     {
@@ -46,6 +45,19 @@ public class PlayerMovement : MonoBehaviour
         if (Input.GetKeyDown(Jump) && onGround)
         {
             rb.AddForce(new Vector3(0, 1.5f, 0) * JumpForce, ForceMode2D.Impulse);
+        }
+    }
+
+    public void Damage(float amount)
+    {
+        if(healthPoints-amount <= 0)
+        {
+            LevelTestManager.SpawnPlayer(gameObject);
+            healthPoints = SpawnHealth;
+        }
+        else
+        {
+            healthPoints -= amount;
         }
     }
 

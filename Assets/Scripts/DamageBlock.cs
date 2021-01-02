@@ -4,15 +4,11 @@ public class DamageBlock : MonoBehaviour
 {
     public float DPS { get; internal set; }
 
-    // Start is called before the first frame update
-    private void Start()
+    private void OnCollisionStay2D(Collision2D collision)
     {
-
-    }
-
-    // Update is called once per frame
-    private void Update()
-    {
-
+        if (collision.gameObject.CompareTag("Player"))
+        {
+            collision.gameObject.GetComponent<PlayerController>().Damage(DPS/Time.deltaTime); // damage the calculated damage per frame
+        }
     }
 }

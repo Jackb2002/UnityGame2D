@@ -4,15 +4,18 @@ public class TimerBlock : MonoBehaviour
 {
     public float TickTime { get; internal set; }
 
-    // Start is called before the first frame update
-    private void Start()
-    {
+    private bool solid;
+    private BoxCollider2D col;
 
+    private void Awake()
+    {
+        InvokeRepeating("TickBlock", TickTime, TickTime);
+        solid = true;
+        col = GetComponent<BoxCollider2D>();
     }
 
-    // Update is called once per frame
-    private void Update()
+    private void TickBlock()
     {
-
+        col.isTrigger = !solid;
     }
 }
