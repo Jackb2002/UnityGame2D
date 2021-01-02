@@ -44,7 +44,7 @@ public class LevelBuilderManager : MonoBehaviour
         GameObject.Find("Grid").GetComponent<Map>().SendMessage("Awake");
     }
 
-    public void PlayLevel(bool Online = false)
+    public void TestLevel(bool Online = false)
     {
         if (GameObject.Find("Spawn") == null || GameObject.Find("Goal") == null)
         {
@@ -122,7 +122,7 @@ public class LevelBuilderManager : MonoBehaviour
                 }
             }
 
-            SceneManager.LoadSceneAsync(1, LoadSceneMode.Additive);
+            SceneManager.LoadSceneAsync(2, LoadSceneMode.Additive);
             LevelTestManager.LevelBuilder = GameObject.Find("LevelBuilder");
             LevelTestManager.LevelBuilder.SetActive(false);
             MAP.AddComponent<LevelTestManager>();

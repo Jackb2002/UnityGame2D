@@ -31,6 +31,6 @@ public class LevelTestManager : MonoBehaviour
         LevelBuilder.SetActive(true);
         LevelBuilder = null;
         Destroy(GameObject.Find("LEVEL"));
-        SceneManager.UnloadSceneAsync(1, UnloadSceneOptions.UnloadAllEmbeddedSceneObjects);
+        SceneManager.UnloadSceneAsync(2, UnloadSceneOptions.UnloadAllEmbeddedSceneObjects);
     }
 }
