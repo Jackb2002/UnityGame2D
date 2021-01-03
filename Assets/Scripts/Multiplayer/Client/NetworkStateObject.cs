@@ -3,7 +3,7 @@ using System.Text;
 
 namespace Assets.Scripts.Multiplayer
 {
-    class NetworkStateObject
+    internal class NetworkStateObject
     {
         public TcpClient client;
         public const int BufferSize = 16384;

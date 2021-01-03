@@ -14,7 +14,7 @@ namespace Assets.Scripts
         public readonly int x;
         public readonly int y;
         public Vector3 WorldPosition;
-        private SerializeableVector3 sVec;
+        private readonly SerializeableVector3 sVec;
 
         public Dictionary<string, object> TileInfo = new Dictionary<string, object>();
 
@@ -48,8 +48,8 @@ namespace Assets.Scripts
             {
                 for (int y = 0; y < g.GetHeight(); y++)
                 {
-                    var tile = d.Where(item => item.x == x && item.y == y);
-                    var element = tile.ElementAt(0);
+                    IEnumerable<DataTile> tile = d.Where(item => item.x == x && item.y == y);
+                    DataTile element = tile.ElementAt(0);
                     if (element != null)
                     {
                         g.SetGridObject(x, y, element);

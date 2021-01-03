@@ -18,7 +18,7 @@ public class LevelTestManager : MonoBehaviour
 
     internal static void SpawnPlayer(GameObject Player)
     {
-        var s = GameObject.Find("Spawn");
+        GameObject s = GameObject.Find("Spawn");
         s.GetComponent<SpawnBlock>().SpawnPlayer(Player);
     }
 

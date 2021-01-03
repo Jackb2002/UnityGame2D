@@ -8,7 +8,7 @@ public class DamageBlock : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("Player"))
         {
-            collision.gameObject.GetComponent<PlayerController>().Damage(DPS/Time.deltaTime); // damage the calculated damage per frame
+            collision.gameObject.GetComponent<PlayerController>().Damage(DPS / Time.deltaTime); // damage the calculated damage per frame
         }
     }
 }

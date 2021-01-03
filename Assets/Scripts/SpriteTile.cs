@@ -39,8 +39,8 @@ public class SpriteTile
                 x,
                 y,
                 ItemManager.CurrentSpritePath));
-            
-            DataTile.AssignTileInfo(Map.DataGrid.GetGridObject(x,y));
+
+            DataTile.AssignTileInfo(Map.DataGrid.GetGridObject(x, y));
         } // update data grid as well
     }
 
@@ -67,8 +67,8 @@ public class SpriteTile
         {
             for (int y = 0; y < g.GetHeight(); y++)
             {
-                var data = d.Single(item => item.x == x && item.y == y);
-                var spriteTile = new SpriteTile(x, y, Resources.Load<Sprite>(data.SpritePath), data.WorldPosition, false);
+                DataTile data = d.Single(item => item.x == x && item.y == y);
+                SpriteTile spriteTile = new SpriteTile(x, y, Resources.Load<Sprite>(data.SpritePath), data.WorldPosition, false);
                 g.SetGridObject(x, y, spriteTile);
             }
         }

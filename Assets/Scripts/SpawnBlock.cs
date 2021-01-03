@@ -2,7 +2,10 @@
 
 public class SpawnBlock : MonoBehaviour
 {
-    public void SpawnPlayer(GameObject Player) => Player.transform.position = GetTopOfBlock();
+    public void SpawnPlayer(GameObject Player)
+    {
+        Player.transform.position = GetTopOfBlock();
+    }
 
     private Vector3 GetTopOfBlock()
     {

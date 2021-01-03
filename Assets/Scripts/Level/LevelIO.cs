@@ -9,7 +9,7 @@ namespace Assets.Scripts.Level
 {
     public static class LevelIO
     {
-        private static StringBuilder SaveFileContents = new StringBuilder();
+        private static readonly StringBuilder SaveFileContents = new StringBuilder();
 
         public static string SaveLevel(LevelData ld, string Path)
         {
@@ -22,8 +22,8 @@ namespace Assets.Scripts.Level
             {
                 for (int y = 0; y < ld.Data.GetHeight(); y++)
                 {
-                    var obj = ld.Data.GetGridObject(x, y);
-                    var s = string.Join(":", obj.ID, obj.Name, obj.WorldPosition, obj.SpritePath, obj.x, obj.y);
+                    DataTile obj = ld.Data.GetGridObject(x, y);
+                    string s = string.Join(":", obj.ID, obj.Name, obj.WorldPosition, obj.SpritePath, obj.x, obj.y);
                     AddToFile(s + Environment.NewLine);
                 }
             }
@@ -54,7 +54,7 @@ namespace Assets.Scripts.Level
             List<DataTile> DataItems = new List<DataTile>();
             for (int lineIndex = 4; lineIndex < Lines.Length; lineIndex++)
             {
-                if(Lines[lineIndex].Trim() == "END")
+                if (Lines[lineIndex].Trim() == "END")
                 {
                     break;
                 }
@@ -65,7 +65,7 @@ namespace Assets.Scripts.Level
             int[] dims;
             dims = GetDimensions(DataItems);
             Vector3 Origin = new Vector3(-dims[0] * Map.MAP_TILE_SIZE / 2, -dims[1] * Map.MAP_TILE_SIZE / 2);
-            
+
             Grid<DataTile> DataGrid = new Grid<DataTile>(dims[0], dims[1], Map.MAP_TILE_SIZE, Origin, false);
             Grid<SpriteTile> SpriteGrid = new Grid<SpriteTile>(dims[0], dims[1], Map.MAP_TILE_SIZE, Origin, false);
 
@@ -98,10 +98,10 @@ namespace Assets.Scripts.Level
         private static DataTile GetTile(string[] data)
         {
             string[] vals = data[2].Replace("(", string.Empty).Replace(")", string.Empty).Split(',');
-            var worldPos = new Vector3(float.Parse(vals[0]),
+            Vector3 worldPos = new Vector3(float.Parse(vals[0]),
                             float.Parse(vals[1]),
                             float.Parse(vals[2]));
-            var tile = new DataTile(int.Parse(data[0]), data[1], worldPos, int.Parse(data[4]), int.Parse(data[5]), data[3]);
+            DataTile tile = new DataTile(int.Parse(data[0]), data[1], worldPos, int.Parse(data[4]), int.Parse(data[5]), data[3]);
             if (tile.Name != "Empty")
             {
                 DataTile.AssignTileInfo(tile);
@@ -109,6 +109,9 @@ namespace Assets.Scripts.Level
             return tile;
         }
 
-        private static void AddToFile(string v) => SaveFileContents.Append(v);
+        private static void AddToFile(string v)
+        {
+            SaveFileContents.Append(v);
+        }
     }
 }

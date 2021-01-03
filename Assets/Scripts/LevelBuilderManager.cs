@@ -28,13 +28,15 @@ public class LevelBuilderManager : MonoBehaviour
 
     public void SaveLevel()
     {
-        SaveFileDialog sfd = new SaveFileDialog();
-        sfd.DefaultExt = ".level";
-        sfd.Filter = "Level Files | *.level";
-        if(sfd.ShowDialog() == DialogResult.OK)
+        SaveFileDialog sfd = new SaveFileDialog
+        {
+            DefaultExt = ".level",
+            Filter = "Level Files | *.level"
+        };
+        if (sfd.ShowDialog() == DialogResult.OK)
         {
             LevelData ld = new LevelData(Path.GetFileNameWithoutExtension(sfd.FileName), Map.DataGrid, Map.SpriteGrid, "Author", 8); // defualt settings will implement changing it later
-            LevelIO.SaveLevel(ld,Path.GetFullPath(sfd.FileName));
+            LevelIO.SaveLevel(ld, Path.GetFullPath(sfd.FileName));
         }
     }
 

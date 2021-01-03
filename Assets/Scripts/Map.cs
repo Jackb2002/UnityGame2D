@@ -1,7 +1,6 @@
 ﻿using Assets.Scripts;
 using Assets.Scripts.Level;
 using CodeMonkey.Utils;
-using System;
 using System.Windows.Forms;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -56,11 +55,13 @@ public partial class Map : MonoBehaviour
         }
         else
         {
-            OpenFileDialog ofd = new OpenFileDialog();
-            ofd.Filter = "Level Files (*.level)|*.level";
+            OpenFileDialog ofd = new OpenFileDialog
+            {
+                Filter = "Level Files (*.level)|*.level"
+            };
             if (ofd.ShowDialog() == DialogResult.OK)
             {
-                var ld = LevelIO.LoadLevel(ofd.FileName);
+                LevelData ld = LevelIO.LoadLevel(ofd.FileName);
                 for (int x = 0; x < SpriteGrid.GetWidth(); x++)
                 {
                     for (int y = 0; y < SpriteGrid.GetHeight(); y++)

@@ -13,9 +13,9 @@ public class PlayerClientConnection
 
     private TcpClient client;
     private const int BUFFER_SIZE = 16384;
-    private ManualResetEvent connectDone = new ManualResetEvent(false);
-    private ManualResetEvent sendDone = new ManualResetEvent(false);
-    private ManualResetEvent recieveDone = new ManualResetEvent(false);
+    private readonly ManualResetEvent connectDone = new ManualResetEvent(false);
+    private readonly ManualResetEvent sendDone = new ManualResetEvent(false);
+    private readonly ManualResetEvent recieveDone = new ManualResetEvent(false);
 
     public string Name { get; private set; }
     public GUID ID { get; private set; }
@@ -69,8 +69,10 @@ public class PlayerClientConnection
 
     public void Recieve()
     {
-        NetworkStateObject state = new NetworkStateObject();
-        state.client = client;
+        NetworkStateObject state = new NetworkStateObject
+        {
+            client = client
+        };
         client.Client.BeginReceive(state.Buffer, 0, BUFFER_SIZE, SocketFlags.None, new AsyncCallback(RecieveCallback), state);
         recieveDone.WaitOne();
     }

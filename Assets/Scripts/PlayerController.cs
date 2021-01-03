@@ -24,7 +24,7 @@ public class PlayerController : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
         onGround = true;
         healthPoints = SpawnHealth;
-    }  
+    }
 
     private void FixedUpdate()
     {
@@ -50,7 +50,7 @@ public class PlayerController : MonoBehaviour
 
     public void Damage(float amount)
     {
-        if(healthPoints-amount <= 0)
+        if (healthPoints - amount <= 0)
         {
             LevelTestManager.SpawnPlayer(gameObject);
             healthPoints = SpawnHealth;
