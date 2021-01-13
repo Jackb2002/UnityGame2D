@@ -35,7 +35,7 @@ public class PlayerClientConnection
     {
         try
         {
-            client = (TcpClient)ar.AsyncState;
+            client = (TcpClient)ar.AsyncState; // the async state stores the client as passed in durig the beinconnect func call 
             client.EndConnect(ar);
             Debug.Log($"Connected to {IP}");
             SendClientData("CONNECTED");

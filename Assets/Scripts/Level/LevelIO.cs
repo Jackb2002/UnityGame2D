@@ -9,7 +9,7 @@ namespace Assets.Scripts.Level
 {
     public static class LevelIO
     {
-        private static readonly StringBuilder SaveFileContents = new StringBuilder();
+        private static readonly StringBuilder SaveFileContents = new StringBuilder(); // In order to build a string for the contents of the save file
 
         public static string SaveLevel(LevelData ld, string Path)
         {
@@ -22,18 +22,16 @@ namespace Assets.Scripts.Level
             {
                 for (int y = 0; y < ld.Data.GetHeight(); y++)
                 {
-                    DataTile obj = ld.Data.GetGridObject(x, y);
-                    string s = string.Join(":", obj.ID, obj.Name, obj.WorldPosition, obj.SpritePath, obj.x, obj.y);
-                    AddToFile(s + Environment.NewLine);
+                    DataTile obj = ld.Data.GetGridObject(x, y); // get the coresponding data tile for the loop vars
+                    string s = string.Join(":", obj.ID, obj.Name, obj.WorldPosition, obj.SpritePath, obj.x, obj.y); // create a colon seperated version of classs fields
+                    AddToFile(s + Environment.NewLine); // add it to the file
                 }
             }
             AddToFile("END" + Environment.NewLine);
-            File.Create(Path).Close();
-            File.WriteAllText(Path, SaveFileContents.ToString());
+            File.Create(Path).Close(); // create the file and close the stream
+            File.WriteAllText(Path, SaveFileContents.ToString()); // write the string builder contents
             Debug.Log("Written to level file " + Path + " Content of length " + SaveFileContents.Length);
-            string path = new FileInfo(Path).FullName;
-            Debug.Log("Saved to " + path);
-            return path; // should return the full path
+            return Path;
         }
 
         public static LevelData LoadLevel(string Path)
@@ -115,3 +113,4 @@ namespace Assets.Scripts.Level
         }
     }
 }
+
